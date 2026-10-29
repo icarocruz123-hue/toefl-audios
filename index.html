@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>body{margin:0}</style>
+<title>Áudios TOEFL iBT</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,600&display=swap">
+<style>
+/* Layout: uma coluna estreita; o player fixo embaixo é o único elemento com destaque. */
+:root{
+  --bg:#f5f6f9; --surface:#ffffff; --fg:#17223b; --muted:#5d6880; --line:#dde2ec;
+  --navy:#1f3a68; --gold:#b8862a; --hi:#fff6e2;
+  --f-body:"Source Sans 3",system-ui,sans-serif; --f-disp:"Source Serif 4",Georgia,serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1524; --surface:#16203a; --fg:#e6ebf5; --muted:#9aa6bf; --line:#27334f;
+  --navy:#8fb0e8; --gold:#e3b860; --hi:#2a2a1c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1524; --surface:#16203a; --fg:#e6ebf5; --muted:#9aa6bf; --line:#27334f;
+  --navy:#8fb0e8; --gold:#e3b860; --hi:#2a2a1c; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:16px/1.5 var(--f-body)}
+.wrap{max-width:640px;margin:0 auto;padding-block:28px 140px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.stripe{display:flex;width:84px;height:5px;margin-bottom:18px}
+.stripe i{flex:1}.stripe i:nth-child(1){background:#c99a2e}.stripe i:nth-child(2){background:var(--line)}.stripe i:nth-child(3){background:#b23a1e}
+h1{font:600 1.75rem/1.2 var(--f-disp);margin:0 0 6px;text-wrap:balance}
+.sub{color:var(--muted);margin:0 0 26px}
+h2{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:28px 0 8px}
+.lista{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.play{all:unset;box-sizing:border-box;width:100%;display:grid;grid-template-columns:44px 1fr 28px;align-items:center;gap:12px;
+  background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
+.play:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums;font-weight:700;color:var(--navy);font-size:1.05rem;text-align:center}
+.tt{min-width:0}
+.ic{width:0;height:0;border-left:12px solid var(--navy);border-top:8px solid transparent;border-bottom:8px solid transparent;justify-self:center}
+.trk.on .play{border-color:var(--gold);background:var(--hi)}
+.trk.on .ic{width:12px;height:14px;border:0;border-left:4px solid var(--navy);border-right:4px solid var(--navy)}
+.trk.alvo .play{border-color:var(--gold);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 30%,transparent)}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);
+  padding-block:12px calc(12px + env(safe-area-inset-bottom,0px));
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar .in{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:6px}
+.bar .now{font-weight:600;font-size:.95rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar .now span{color:var(--muted);font-weight:400}
+audio{width:100%}
+.hero{background:var(--surface);border:2px solid var(--gold);border-radius:14px;padding:18px;margin:0 0 8px;display:flex;flex-direction:column;gap:6px}
+.hk{margin:0;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.ht{margin:0 0 8px;font:600 1.25rem/1.25 var(--f-disp);text-wrap:balance}
+.big{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:12px;background:var(--navy);color:var(--bg);
+  border-radius:12px;min-height:64px;font-weight:700;font-size:1.2rem;cursor:pointer}
+.big:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.bi{width:0;height:0;border-left:16px solid currentColor;border-top:11px solid transparent;border-bottom:11px solid transparent}
+.big.pause .bi{width:14px;height:20px;border:0;border-left:5px solid currentColor;border-right:5px solid currentColor}
+.note{color:var(--muted);font-size:.85rem;margin-top:30px}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+<div class="wrap">
+  <div class="stripe"><i></i><i></i><i></i></div>
+  <h1>Áudios do curso TOEFL iBT</h1>
+  <p class="sub">44 faixas do livro. Toque numa faixa para ouvir; o código QR de cada atividade abre direto na faixa certa.</p>
+  <div class="hero" id="hero" hidden>
+    <p class="hk" id="hk">Faixa</p>
+    <p class="ht" id="ht"></p>
+    <button class="big" id="big" type="button"><span class="bi" aria-hidden="true"></span><span id="bl">Tocar</span></button>
+  </div>
+  <section><h2>Diagnóstico</h2><ol class="lista"><li class="trk" id="f01"><button class="play" data-src="a/f01.mp3" aria-label="Tocar faixa 01"><span class="num">01</span><span class="tt">Diagnóstico — Listen and Choose a Response</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f02"><button class="play" data-src="a/f02.mp3" aria-label="Tocar faixa 02"><span class="num">02</span><span class="tt">Diagnóstico — Conversation at the library</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f03"><button class="play" data-src="a/f03.mp3" aria-label="Tocar faixa 03"><span class="num">03</span><span class="tt">Diagnóstico — Announcement about a field trip</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f04"><button class="play" data-src="a/f04.mp3" aria-label="Tocar faixa 04"><span class="num">04</span><span class="tt">Diagnóstico — Academic talk on mimicry</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f05"><button class="play" data-src="a/f05.mp3" aria-label="Tocar faixa 05"><span class="num">05</span><span class="tt">Diagnóstico — Listen and Repeat (museum)</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f06"><button class="play" data-src="a/f06.mp3" aria-label="Tocar faixa 06"><span class="num">06</span><span class="tt">Diagnóstico — Take an Interview (technology and learning)</span><span class="ic" aria-hidden="true"></span></button></li></ol></section>
+<section><h2>Unidade 3</h2><ol class="lista"><li class="trk" id="f10"><button class="play" data-src="a/f10.mp3" aria-label="Tocar faixa 10"><span class="num">10</span><span class="tt">Choose a Response (série A)</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f11"><button class="play" data-src="a/f11.mp3" aria-label="Tocar faixa 11"><span class="num">11</span><span class="tt">Choose a Response (série B)</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f12"><button class="play" data-src="a/f12.mp3" aria-label="Tocar faixa 12"><span class="num">12</span><span class="tt">Conversation in office hours</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f13"><button class="play" data-src="a/f13.mp3" aria-label="Tocar faixa 13"><span class="num">13</span><span class="tt">Conversation at the housing office</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f14"><button class="play" data-src="a/f14.mp3" aria-label="Tocar faixa 14"><span class="num">14</span><span class="tt">Announcement: library renovation</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f15"><button class="play" data-src="a/f15.mp3" aria-label="Tocar faixa 15"><span class="num">15</span><span class="tt">Announcement: career fair</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f16"><button class="play" data-src="a/f16.mp3" aria-label="Tocar faixa 16"><span class="num">16</span><span class="tt">Academic talk: fossils on mountaintops</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f17"><button class="play" data-src="a/f17.mp3" aria-label="Tocar faixa 17"><span class="num">17</span><span class="tt">Academic talk: rethinking tulip mania</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f18"><button class="play" data-src="a/f18.mp3" aria-label="Tocar faixa 18"><span class="num">18</span><span class="tt">Academic talk: the bystander effect</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f19"><button class="play" data-src="a/f19.mp3" aria-label="Tocar faixa 19"><span class="num">19</span><span class="tt">Dictation: connected speech</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f20"><button class="play" data-src="a/f20.mp3" aria-label="Tocar faixa 20"><span class="num">20</span><span class="tt">Teste da unidade</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f29"><button class="play" data-src="a/f29.mp3" aria-label="Tocar faixa 29"><span class="num">29</span><span class="tt">Choose a Response (série C)</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f38"><button class="play" data-src="a/f38.mp3" aria-label="Tocar faixa 38"><span class="num">38</span><span class="tt">Conversation with a career advisor</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f39"><button class="play" data-src="a/f39.mp3" aria-label="Tocar faixa 39"><span class="num">39</span><span class="tt">Academic talk: sleeping with half a brain</span><span class="ic" aria-hidden="true"></span></button></li></ol></section>
+<section><h2>Unidade 4</h2><ol class="lista"><li class="trk" id="f21"><button class="play" data-src="a/f21.mp3" aria-label="Tocar faixa 21"><span class="num">21</span><span class="tt">Listen and Repeat (café)</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f22"><button class="play" data-src="a/f22.mp3" aria-label="Tocar faixa 22"><span class="num">22</span><span class="tt">Listen and Repeat (lab)</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f23"><button class="play" data-src="a/f23.mp3" aria-label="Tocar faixa 23"><span class="num">23</span><span class="tt">Listen and Repeat (campus tour)</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f24"><button class="play" data-src="a/f24.mp3" aria-label="Tocar faixa 24"><span class="num">24</span><span class="tt">Interview: city life</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f25"><button class="play" data-src="a/f25.mp3" aria-label="Tocar faixa 25"><span class="num">25</span><span class="tt">Interview: work and careers</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f26"><button class="play" data-src="a/f26.mp3" aria-label="Tocar faixa 26"><span class="num">26</span><span class="tt">Interview: the environment</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f27"><button class="play" data-src="a/f27.mp3" aria-label="Tocar faixa 27"><span class="num">27</span><span class="tt">Teste: interview on education</span><span class="ic" aria-hidden="true"></span></button></li></ol></section>
+<section><h2>Unidade 8</h2><ol class="lista"><li class="trk" id="f28"><button class="play" data-src="a/f28.mp3" aria-label="Tocar faixa 28"><span class="num">28</span><span class="tt">Academic talk: railroads and standard time</span><span class="ic" aria-hidden="true"></span></button></li></ol></section>
+<section><h2>Simulado 1</h2><ol class="lista"><li class="trk" id="f30"><button class="play" data-src="a/f30.mp3" aria-label="Tocar faixa 30"><span class="num">30</span><span class="tt">Choose a Response</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f31"><button class="play" data-src="a/f31.mp3" aria-label="Tocar faixa 31"><span class="num">31</span><span class="tt">Conversation: missed lab</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f32"><button class="play" data-src="a/f32.mp3" aria-label="Tocar faixa 32"><span class="num">32</span><span class="tt">Conversation: summer plans</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f33"><button class="play" data-src="a/f33.mp3" aria-label="Tocar faixa 33"><span class="num">33</span><span class="tt">Announcement: shuttle changes</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f34"><button class="play" data-src="a/f34.mp3" aria-label="Tocar faixa 34"><span class="num">34</span><span class="tt">Academic talk: what counts as a planet</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f35"><button class="play" data-src="a/f35.mp3" aria-label="Tocar faixa 35"><span class="num">35</span><span class="tt">Academic talk: borrowing words</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f36"><button class="play" data-src="a/f36.mp3" aria-label="Tocar faixa 36"><span class="num">36</span><span class="tt">Listen and Repeat (gym)</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f37"><button class="play" data-src="a/f37.mp3" aria-label="Tocar faixa 37"><span class="num">37</span><span class="tt">Interview: travel and culture</span><span class="ic" aria-hidden="true"></span></button></li></ol></section>
+<section><h2>Simulado 2</h2><ol class="lista"><li class="trk" id="f40"><button class="play" data-src="a/f40.mp3" aria-label="Tocar faixa 40"><span class="num">40</span><span class="tt">Choose a Response</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f41"><button class="play" data-src="a/f41.mp3" aria-label="Tocar faixa 41"><span class="num">41</span><span class="tt">Conversation: financial aid</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f42"><button class="play" data-src="a/f42.mp3" aria-label="Tocar faixa 42"><span class="num">42</span><span class="tt">Conversation: feedback on an essay</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f43"><button class="play" data-src="a/f43.mp3" aria-label="Tocar faixa 43"><span class="num">43</span><span class="tt">Announcement: vaccination clinic</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f44"><button class="play" data-src="a/f44.mp3" aria-label="Tocar faixa 44"><span class="num">44</span><span class="tt">Academic talk: the sunk cost fallacy</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f45"><button class="play" data-src="a/f45.mp3" aria-label="Tocar faixa 45"><span class="num">45</span><span class="tt">Academic talk: whale falls</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f46"><button class="play" data-src="a/f46.mp3" aria-label="Tocar faixa 46"><span class="num">46</span><span class="tt">Listen and Repeat (hotel)</span><span class="ic" aria-hidden="true"></span></button></li><li class="trk" id="f47"><button class="play" data-src="a/f47.mp3" aria-label="Tocar faixa 47"><span class="num">47</span><span class="tt">Interview: health and lifestyle</span><span class="ic" aria-hidden="true"></span></button></li></ol></section>
+  <p class="note">Ouça cada faixa uma vez antes de responder, como na prova. Nas faixas de Speaking, o silêncio depois do bipe tem o tempo exato de resposta.</p>
+</div>
+<div class="bar"><div class="in">
+  <div class="now" id="now">Escolha uma faixa <span>· nada tocando</span></div>
+  <audio id="pl" controls preload="none"></audio>
+</div></div>
+<script>
+const pl=document.getElementById('pl'),now=document.getElementById('now');
+let atual=null;
+function sel(li,tocar){
+  if(atual)atual.classList.remove('on');
+  atual=li;li.classList.add('on');
+  const b=li.querySelector('.play');
+  pl.src=b.dataset.src;
+  now.innerHTML='';
+  const t=document.createElement('span');t.style.color='inherit';t.style.fontWeight='600';
+  t.textContent='Faixa '+li.querySelector('.num').textContent+' ';
+  const s=document.createElement('span');s.textContent='· '+li.querySelector('.tt').textContent;
+  now.append(t,s);
+  if(tocar)pl.play().catch(()=>{});
+}
+document.querySelectorAll('.trk').forEach(li=>{
+  li.querySelector('.play').addEventListener('click',()=>{
+    if(atual===li&&!pl.paused){pl.pause();return}
+    if(atual===li){pl.play().catch(()=>{});return}
+    sel(li,true);
+  });
+});
+pl.addEventListener('pause',()=>atual&&atual.classList.remove('on'));
+pl.addEventListener('play',()=>atual&&atual.classList.add('on'));
+function abrirHash(){
+  const id=(location.hash||'').slice(1);const li=id&&document.getElementById(id);
+  if(!li)return;
+  document.querySelectorAll('.alvo').forEach(x=>x.classList.remove('alvo'));
+  li.classList.add('alvo');sel(li,false);
+  document.getElementById('hk').textContent='Faixa '+li.querySelector('.num').textContent;
+  document.getElementById('ht').textContent=li.querySelector('.tt').textContent;
+  document.getElementById('hero').hidden=false;window.scrollTo({top:0});
+}
+const big=document.getElementById('big'),bl=document.getElementById('bl');
+big.addEventListener('click',()=>{if(pl.paused){pl.play().catch(()=>{})}else{pl.pause()}});
+pl.addEventListener('play',()=>{big.classList.add('pause');bl.textContent='Pausar'});
+pl.addEventListener('pause',()=>{big.classList.remove('pause');bl.textContent='Tocar'});
+pl.addEventListener('ended',()=>{bl.textContent='Ouvir de novo'});
+window.addEventListener('hashchange',abrirHash);abrirHash();
+</script>
+
+</html>
